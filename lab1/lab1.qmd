@@ -1,9 +1,14 @@
 ---
 title: "Lab 1: Gapminder Data Visualization"
 author: "Shawheen Ghezavat"
-format: html
+format:
+  html:
+    embed-resources: true
 jupyter: python3
 ---
+[View this project on GitHub](https://github.com/shxwheen/msba-ml-labs/tree/main/lab1)
+
+
 
 # Task 1: Income vs Life Expectancy
 Aesthetics: x = Income, y = Life Expectancy, size = Population, color = 'four_regions'
