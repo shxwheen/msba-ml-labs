@@ -1,0 +1,126 @@
+---
+title: "Lab 1: Gapminder Data Visualization"
+author: "Shawheen Ghezavat"
+format: html
+jupyter: python3
+---
+
+# Task 1: Income vs Life Expectancy
+Aesthetics: x = Income, y = Life Expectancy, size = Population, color = 'four_regions'
+
+
+```{python}
+import pandas as pd
+from plotnine import *
+import matplotlib.pyplot as plt
+
+
+df = pd.read_csv('data/q1data.csv')
+
+p = (
+    # make plot
+    ggplot(df, aes(x='income', y='life_exp', size='population', color='four_regions'))
+    + geom_point(alpha=0.7)
+    + scale_size_continuous(range=(2, 12))
+    + theme_minimal()
+    + labs(x='Income', y='Life Expectancy', size='Population', color='Region')
+)
+# show
+p
+```
+Other options: scatter plot w/ trend line, box plot by region, 2d bin graph
+
+## Alt: 2D Bin Graph / Heatmap of counts
+The x–y space is divided into a grid of rectangular bins. Each bin counts how many countries fall inside it. The bin is shaded according to that count. Darker or brighter means more observations.
+
+```{python}
+# make plot
+p2 = (
+    ggplot(df, aes('income', 'life_exp'))
+    + geom_bin2d(bins=30)
+    + scale_fill_continuous(name='Count')
+    + labs(
+        title='Income vs Life Expectancy (2D bins)',
+        x='Income', y='Life expectancy (years)'
+    )
+    + theme_minimal()
+)
+# show
+p2
+```
+
+# Task 2: Imports vs. Exports
+Aesthetics: x = Exports (% of GDP), y = Imports (% of GDP), size = energy, color = 'four_regions'
+```{python}
+import pandas as pd
+from plotnine import *
+import matplotlib.pyplot as plt
+
+# load data
+df = pd.read_csv('data/q2data.csv')
+
+# make sure numeric
+for col in ['imports', 'exports', 'energy']:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+# make plot
+p = (
+    ggplot(df, aes(x='exports', y='imports', size='energy', color='four_regions'))
+    + geom_point(alpha=0.7)
+    + scale_size_continuous(range=(2, 12))
+    + theme_minimal()
+    + labs(x='Exports (% of GDP)', y='Imports (% of GDP)', size='Energy', color='Region')
+)
+# show
+p
+```
+
+Other options: 2d bin graph, scatter plot w/ trendline, heat map
+
+# Alt: Heatmap
+Here, each observation (country) is drawn as a little rectangle (tile) at its (exports, imports) coordinates, colored by its energy value.
+```{python}
+p2 = (
+    ggplot(df, aes(x='exports', y='imports', fill='energy'))
+    + geom_tile()
+    + theme_minimal()
+    + labs(
+        x='Exports (% of GDP)',
+        y='Imports (% of GDP)',
+        fill='Energy',
+        title='Imports vs Exports - Heatmap by Energy'
+    )
+)
+p2
+```
+
+# Task 3: Individuals Using the Internet vs. GDP per Capita
+Aesthetics: x = 'internet_users', y = 'gdp', size = 'income', color = 'four_regions'
+```{python}
+# load data
+df = pd.read_csv('data/q3data.csv')
+
+# make plot
+p = (
+    ggplot(df, aes(x='internet_users', y='gdp', size='income', color='four_regions'))
+    + geom_point(alpha=0.7) 
+    + scale_size_continuous(range=(2, 12))
+    + theme_minimal()
+    + labs(x='% of individuals on the internet', y='GDP per capita', size='Income', color='Region', title='GDP per capita distribution by % of individauls on the internet')
+)
+# show
+p
+```
+
+## Alt: Violin Plot
+The violin plot shows GDP distribution per region and captures density shape. The only issue with this plot is that it now disregards the % of individuals on the internet aspect.
+```{python}
+
+p_violin = (
+    ggplot(df, aes(x='four_regions', y='gdp'))
+    + geom_violin(fill='lightblue', alpha=0.6, trim=True)
+    + theme_minimal()
+    + labs(x='Region', y='GDP per capita',
+           title='Task 3 - GDP per capita distribution by Region')
+)
+p_violin
+```
