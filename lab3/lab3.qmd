@@ -1,0 +1,115 @@
+---
+title: "Lab 3"
+author: "Shawheen Ghezavat"
+format:
+  html:
+    embed-resources: true
+jupyter: python3
+---
+[View this project on GitHub](https://github.com/shxwheen/msba-ml-labs/tree/main/lab3)
+
+# Initial Setup
+
+```{python}
+import pandas as pd
+xmas = pd.read_csv("xmas.csv")
+# fill na
+xmas[['Verb','Adjective','Location']] = xmas[['Verb','Adjective','Location']].fillna('')
+
+
+# create a mapping from day numbers to cardinal number words
+number_to_word = {
+    "first": "a",  # special case for day 1
+    "second": "two",
+    "third": "three", 
+    "fourth": "four",
+    "fifth": "five",
+    "sixth": "six",
+    "seventh": "seven",
+    "eighth": "eight",
+    "ninth": "nine",
+    "tenth": "ten",
+    "eleventh": "eleven",
+    "twelfth": "twelve"
+}
+
+# create a new column with cardinal number words
+xmas['Gift_Number'] = xmas['Day.in.Words'].map(number_to_word)
+xmas.head()
+```
+
+# Function 1: pluralize_gift()
+```{python}
+# pluralize with 's' unless gift is geese or lady
+def pluralize_gift(gift):
+    if gift == 'goose':
+        gift = 'geese'
+    elif gift == 'lady':
+        gift = 'ladies'
+    else:
+        gift = gift + 's'
+    return gift
+```
+
+# Function 2: make_phrase()
+```{python}
+def make_phrase(num, num_word, gift, verb, adjective, location):
+
+    # step 1: fillna was done earlier on the whole dataframe so that it doesn't run every time make_phrase() is called 
+
+    # step 2: check if day is greater than 1
+    if num > 1:
+        gift = pluralize_gift(gift)
+    # step 3: vowel check
+    starts_with_vowel = gift[0] in ['a', 'e', 'i', 'o', 'u']
+
+    # step 4: a, an, or num check
+    if num == 1:
+        if starts_with_vowel:
+            article = "an"
+        else:
+            article = "a"
+    else:
+        article = num_word
+    
+    # step 5: put all pieces together into one string and return
+    parts = [article, adjective, gift, verb, location]
+    return " ".join(p.strip() for p in parts if p and str(p).strip())
+
+xmas['Full.Phrase'] = xmas.apply(lambda row: make_phrase(row['Day'], row['Gift_Number'], row['Gift.Item'], row['Verb'], row['Adjective'], row['Location']), axis=1)
+
+xmas['Full.Phrase'].head()
+```
+
+# Function 3: sing_day()
+```{python}
+def sing_day(dataset, num, phrase_col):
+    # step 1: setup intro
+    num_word = dataset[dataset['Day'] == num]['Day.in.Words'].iloc[0]  # convert "1" to "first" etc.
+    intro = "On the " + num_word + " day of Christmas, my true love sent to me:"
+    
+    # step 2: sing the gift phrases
+    lines = []
+    for i in range(num, 0, -1):  # go from current day down to day 1
+        gift_phrase = dataset[dataset['Day'] == i][phrase_col].iloc[0] # acquire gift phrase 
+        if i == 1:
+            # last line: 'and' if not only gift in phrase, period if last line
+            line = (("and " if num > 1 else "") + gift_phrase + ".")
+        else:
+            # every other line ends with a comma
+            line = gift_phrase + ","
+        lines.append(line)
+    
+    # step 3: put it all together and return
+    return intro + "\n" + "\n".join(lines)
+
+sing_day(xmas, 3, "Full.Phrase")
+```
+
+# Full Song
+```{python}
+for day in range(1, 13):
+    print(sing_day(xmas, day, "Full.Phrase"), end="\n\n")
+```
+
+
