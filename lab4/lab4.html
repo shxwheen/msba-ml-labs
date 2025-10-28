@@ -2207,10 +2207,10 @@ vertical-align: -.125em;
 </header>
 
 
-<p><a href>View this project on GitHub</a></p>
+<p><a href="https://github.com/shxwheen/msba-ml-labs/tree/main/lab4">View this project on GitHub</a></p>
 <section id="imports" class="level1">
 <h1>Imports</h1>
-<div id="565e928b" class="cell" data-execution_count="1">
+<div id="6a73a7c8" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -2221,7 +2221,7 @@ vertical-align: -.125em;
 </section>
 <section id="data-from-unstructured-websites" class="level1">
 <h1>1 Data From Unstructured Websites</h1>
-<div id="fc10862f" class="cell" data-execution_count="2">
+<div id="da8026ae" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -2312,24 +2312,26 @@ vertical-align: -.125em;
 </section>
 <section id="data-from-api" class="level1">
 <h1>2 Data From API</h1>
-<div id="4782df71" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://tasty.p.rapidapi.com/recipes/list&quot;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>monday_dish <span class="op">=</span> df.loc[df[<span class="st">&#39;Day&#39;</span>] <span class="op">==</span> <span class="st">&#39;Monday&#39;</span>, <span class="st">&#39;Dish&#39;</span>]</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>querystring <span class="op">=</span> {<span class="st">&quot;from&quot;</span>:<span class="st">&quot;0&quot;</span>,<span class="st">&quot;size&quot;</span>:<span class="st">&quot;20&quot;</span>,<span class="st">&quot;q&quot;</span>:monday_dish}</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;X-RapidAPI-Key&quot;</span>: <span class="st">&quot;684841e2bdmsha5227e8a9e936c8p139393jsn96254c8645ab&quot;</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;X-RapidAPI-Host&quot;</span>: <span class="st">&quot;tasty.p.rapidapi.com&quot;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url, headers<span class="op">=</span>headers, params<span class="op">=</span>querystring)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>recipes <span class="op">=</span> pd.json_normalize(response.json(), <span class="st">&quot;results&quot;</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>monday_recipe_match <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">&quot;recipe&quot;</span>])</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>monday_recipe_match[<span class="st">&quot;recipe&quot;</span>] <span class="op">=</span> recipes[<span class="st">&quot;slug&quot;</span>]</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>monday_recipe_match.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="778a2486" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># api url</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://tasty.p.rapidapi.com/recipes/list&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># find monday dish</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>monday_dish <span class="op">=</span> df.loc[df[<span class="st">&#39;Day&#39;</span>] <span class="op">==</span> <span class="st">&#39;Monday&#39;</span>, <span class="st">&#39;Dish&#39;</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># query</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>querystring <span class="op">=</span> {<span class="st">&quot;from&quot;</span>:<span class="st">&quot;0&quot;</span>,<span class="st">&quot;size&quot;</span>:<span class="st">&quot;20&quot;</span>,<span class="st">&quot;q&quot;</span>:monday_dish}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># headers </span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;X-RapidAPI-Key&quot;</span>: <span class="st">&quot;684841e2bdmsha5227e8a9e936c8p139393jsn96254c8645ab&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;X-RapidAPI-Host&quot;</span>: <span class="st">&quot;tasty.p.rapidapi.com&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># response from api</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url, headers<span class="op">=</span>headers, params<span class="op">=</span>querystring)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># normalize</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>recipes <span class="op">=</span> pd.json_normalize(response.json(), <span class="st">&quot;results&quot;</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># grab recipe names, make DF</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>monday_recipe_match <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">&quot;recipe&quot;</span>])</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>monday_recipe_match[<span class="st">&quot;recipe&quot;</span>] <span class="op">=</span> recipes[<span class="st">&quot;slug&quot;</span>]</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>monday_recipe_match.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
@@ -2375,7 +2377,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="helper-functions">Helper Functions</h2>
 <section id="match_recipe" class="level3">
 <h3 class="anchored" data-anchor-id="match_recipe">match_recipe()</h3>
-<div id="91a2e742" class="cell" data-execution_count="4">
+<div id="daf2a2b7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> match_recipe(weekly_plan_df):</span>
@@ -2505,7 +2507,7 @@ vertical-align: -.125em;
 </section>
 <section id="veggie_or_nah-fuzzy-matching" class="level3">
 <h3 class="anchored" data-anchor-id="veggie_or_nah-fuzzy-matching">veggie_or_nah(): fuzzy matching</h3>
-<div id="2054cb08" class="cell" data-execution_count="5">
+<div id="4856d797" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> veggie_or_nah(title):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># meat keywords </span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    meat_keywords <span class="op">=</span> [<span class="st">&#39;beef&#39;</span>, <span class="st">&#39;chicken&#39;</span>, <span class="st">&#39;pork&#39;</span>, <span class="st">&#39;turkey&#39;</span>, <span class="st">&#39;lamb&#39;</span>, <span class="st">&#39;fish&#39;</span>, <span class="st">&#39;shrimp&#39;</span>, <span class="st">&#39;salmon&#39;</span>, <span class="st">&#39;bacon&#39;</span>, <span class="st">&#39;ham&#39;</span>, <span class="st">&#39;meatball&#39;</span>, <span class="st">&#39;sausage&#39;</span>, <span class="st">&#39;duck&#39;</span>]</span>
@@ -2526,7 +2528,7 @@ vertical-align: -.125em;
 </section>
 <section id="get_weekly_plan" class="level3">
 <h3 class="anchored" data-anchor-id="get_weekly_plan">get_weekly_plan()</h3>
-<div id="9c355446" class="cell" data-execution_count="6">
+<div id="0e69824c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_weekly_plan(number):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    headers <span class="op">=</span> {<span class="st">&quot;User-Agent&quot;</span>: <span class="st">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)&quot;</span>}</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="ss">f&quot;https://tastesbetterfromscratch.com/meal-plan-</span><span class="sc">{</span>number<span class="sc">}</span><span class="ss">/&quot;</span></span>
@@ -2614,7 +2616,7 @@ vertical-align: -.125em;
 </section>
 <section id="graph_protein_vs_cals" class="level3">
 <h3 class="anchored" data-anchor-id="graph_protein_vs_cals">graph_protein_vs_cals()</h3>
-<div id="bfd4f843" class="cell" data-execution_count="7">
+<div id="b58a8900" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> graph_protein_vs_cals(df):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filter out rows missing calories, protein, or vegan</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;nutrition_cals&#39;</span>, <span class="st">&#39;nutrition_protein&#39;</span>, <span class="st">&#39;veggie&#39;</span>])</span>
@@ -2641,19 +2643,20 @@ vertical-align: -.125em;
 </section>
 <section id="main-function-get_mealplan_data" class="level2">
 <h2 class="anchored" data-anchor-id="main-function-get_mealplan_data">main function: get_mealplan_data()</h2>
-<div id="b06712d5" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_mealplan_data(number):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  weekly_plan_df <span class="op">=</span> get_weekly_plan(number)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  full_week_recipes <span class="op">=</span> match_recipe(weekly_plan_df)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  full_week_recipes[<span class="st">&#39;veggie&#39;</span>] <span class="op">=</span> full_week_recipes[<span class="st">&#39;Tasty Recipe&#39;</span>].<span class="bu">apply</span>(veggie_or_nah)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  mask_missing <span class="op">=</span> full_week_recipes[<span class="st">&#39;veggie&#39;</span>].isna()</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  full_week_recipes.loc[mask_missing, <span class="st">&#39;veggie&#39;</span>] <span class="op">=</span> full_week_recipes.loc[mask_missing, <span class="st">&#39;Dish&#39;</span>].<span class="bu">apply</span>(veggie_or_nah)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  plot <span class="op">=</span> graph_protein_vs_cals(full_week_recipes)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> full_week_recipes, plot</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>result_recipes, plot <span class="op">=</span> get_mealplan_data(<span class="dv">202</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>display(result_recipes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="439b7262" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># main func, mainly just function calls to helpers</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_mealplan_data(number):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  weekly_plan_df <span class="op">=</span> get_weekly_plan(number)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  full_week_recipes <span class="op">=</span> match_recipe(weekly_plan_df)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  full_week_recipes[<span class="st">&#39;veggie&#39;</span>] <span class="op">=</span> full_week_recipes[<span class="st">&#39;Tasty Recipe&#39;</span>].<span class="bu">apply</span>(veggie_or_nah)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  mask_missing <span class="op">=</span> full_week_recipes[<span class="st">&#39;veggie&#39;</span>].isna()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  full_week_recipes.loc[mask_missing, <span class="st">&#39;veggie&#39;</span>] <span class="op">=</span> full_week_recipes.loc[mask_missing, <span class="st">&#39;Dish&#39;</span>].<span class="bu">apply</span>(veggie_or_nah)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  plot <span class="op">=</span> graph_protein_vs_cals(full_week_recipes)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> full_week_recipes, plot</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>result_recipes, plot <span class="op">=</span> get_mealplan_data(<span class="dv">202</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>display(result_recipes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\shawh\AppData\Local\Temp\ipykernel_65568\3402865200.py:6: SettingWithCopyWarning: 
+<pre><code>C:\Users\shawh\AppData\Local\Temp\ipykernel_30972\3402865200.py:6: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -2834,7 +2837,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </section>
 <section id="plot-and-analyze" class="level1">
 <h1>5 Plot and Analyze</h1>
-<div id="aac50190" class="cell" data-execution_count="9">
+<div id="3f778e97" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>

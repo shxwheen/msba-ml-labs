@@ -6,7 +6,7 @@ format:
     embed-resources: true
 jupyter: python3
 ---
-[View this project on GitHub]()
+[View this project on GitHub](https://github.com/shxwheen/msba-ml-labs/tree/main/lab4)
 
 # Imports
 ```{python}
