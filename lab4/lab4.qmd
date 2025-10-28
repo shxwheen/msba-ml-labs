@@ -1,0 +1,223 @@
+---
+title: "Lab 4"
+author: "Shawheen Ghezavat"
+format:
+  html:
+    embed-resources: true
+jupyter: python3
+---
+[View this project on GitHub]()
+
+# Imports
+```{python}
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+from plotnine import *
+import matplotlib as plt
+```
+
+
+# 1 Data From Unstructured Websites
+```{python}
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+
+
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+meal_169_url = "https://tastesbetterfromscratch.com/meal-plan-169/"
+response = requests.get(meal_169_url, headers=headers)
+soup = BeautifulSoup(response.content, "html.parser")
+
+# find all relevant <p> tags
+paragraphs = soup.find_all('p', class_='has-text-align-left')
+
+data = []
+for para in paragraphs:
+    strong = para.find('strong') # day
+    link = para.find('a') # link
+    text = para.get_text(separator=" ", strip=True) # dish name , price
+
+    if strong and link:
+        day = strong.text.strip()
+        dish = link.text.strip()
+        dish_url = link['href']
+        # extract price from para text (if present)
+        price_match = re.search(r"\$[\d\.]+", text)
+        price = price_match.group() if price_match else "N/A"
+        data.append({"Day": day, "Dish": dish, "URL": dish_url, "Price": price})
+
+df = pd.DataFrame(data)
+df
+```
+
+# 2 Data From API
+```{python}
+# api url
+url = "https://tasty.p.rapidapi.com/recipes/list"
+# find monday dish
+monday_dish = df.loc[df['Day'] == 'Monday', 'Dish']
+# query
+querystring = {"from":"0","size":"20","q":monday_dish}
+# headers 
+headers = {
+    "X-RapidAPI-Key": "684841e2bdmsha5227e8a9e936c8p139393jsn96254c8645ab",
+    "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+}
+# response from api
+response = requests.get(url, headers=headers, params=querystring)
+# normalize
+recipes = pd.json_normalize(response.json(), "results")
+# grab recipe names, make DF
+monday_recipe_match = pd.DataFrame(columns=["recipe"])
+monday_recipe_match["recipe"] = recipes["slug"]
+monday_recipe_match.head()
+```
+
+# 3 and 4 Automation + Veggie Classification
+## Helper Functions
+### match_recipe()
+```{python}
+import pandas as pd
+
+def match_recipe(weekly_plan_df):
+    all_rows = []
+    for idx, row in weekly_plan_df.iterrows():
+        day = row['Day']
+        dish = row['Dish']
+        # fetch Tasty API results for this dish
+        querystring = {"from": "0", "size": "20", "q": dish}
+        response = requests.get(url, headers=headers, params=querystring)
+        recipes = pd.json_normalize(response.json(), "results")
+        # for each recipe returned by Tasty api, create new row with all info from meal plan plus recipe info
+        if not recipes.empty:
+            for _, recipe in recipes.iterrows():
+                # combine all columns from original row (day/dish) with Tasty recipe fields
+                combined = row.to_dict()
+                # add selected Tasty recipe fields (slug "name" also, name, calories, servings, etc)
+                combined['Tasty Recipe']   = recipe.get('name', None) 
+                combined['tasty_slug']     = recipe.get('slug', None)
+                combined['nutrition_cals'] = recipe.get('nutrition.calories', None)
+                combined['num_servings']   = recipe.get('num_servings', None)
+                combined['nutrition_protein'] = recipe.get('nutrition.protein', None)
+                # add more recipe fields as needed (URL, description, etc)
+                all_rows.append(combined)
+        else:
+            # if no recipes found, still add the original row but with Tasty columns empty
+            combined = row.to_dict()
+            combined['Tasty Recipe']      = None
+            combined['tasty_slug']        = None
+            combined['nutrition_cals']    = None
+            combined['num_servings']      = None
+            combined['nutrition_protein'] = None
+
+            all_rows.append(combined)
+
+    result_df = pd.DataFrame(all_rows)
+    return result_df
+
+match_recipe_res = match_recipe(df)
+match_recipe_res.head()
+```
+
+### veggie_or_nah(): fuzzy matching
+```{python}
+def veggie_or_nah(title):
+    # meat keywords 
+    meat_keywords = ['beef', 'chicken', 'pork', 'turkey', 'lamb', 'fish', 'shrimp', 'salmon', 'bacon', 'ham', 'meatball', 'sausage', 'duck']
+    if title is None or pd.isna(title):
+        return None
+    # lowercase for ease
+    lowercase = str(title).lower()
+    # check if title has meat word
+    for meat in meat_keywords:
+        if meat in lowercase:
+            return 0
+    return 1
+veggie_or_nah(match_recipe_res['Tasty Recipe'][2])
+```
+
+
+### get_weekly_plan()
+```{python}
+def get_weekly_plan(number):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{number}/"
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    # find all relevant <p> tags
+    paragraphs = soup.find_all('p', class_='has-text-align-left')
+
+    data = []
+    for para in paragraphs:
+        strong = para.find('strong') # day
+        link = para.find('a') # link
+        text = para.get_text(separator=" ", strip=True) # dish name , price
+
+        if strong and link:
+            day = strong.text.strip()
+            dish = link.text.strip()
+            dish_url = link['href']
+            # extract price from para text (if present)
+            price_match = re.search(r"\$[\d\.]+", text)
+            price = price_match.group() if price_match else "N/A"
+            data.append({"Day": day, "Dish": dish, "URL": dish_url, "Price": price})
+
+    df = pd.DataFrame(data)
+
+    return df
+get_weekly_plan(202)
+```
+
+### graph_protein_vs_cals()
+```{python}
+def graph_protein_vs_cals(df):
+    # filter out rows missing calories, protein, or vegan
+    data = df.dropna(subset=['nutrition_cals', 'nutrition_protein', 'veggie'])
+
+    # make veggie axis as a category for labeling
+    data['veggie'] = data['veggie'].astype("category")
+
+    # scatter plot calories vs. protein , colored by veggie/non-veggie
+    p = (
+        ggplot(data, aes(x='nutrition_protein', y='nutrition_cals', color='veggie')) +
+        geom_point(size=3, alpha=0.5) +
+        labs(
+            title="Calories vs Protein for Vegetarian (1) vs Non-Vegetarian (0) Meals",
+            x="Protein (g)",
+            y="Calories"
+        ) +
+        scale_color_manual(values={1: "#43a047", 0: "#e53935"},
+                        labels=["Vegetarian", "Non-Vegetarian"]) +
+        theme_minimal()
+    )
+    return p
+```
+
+
+## main function: get_mealplan_data()
+```{python}
+# main func, mainly just function calls to helpers
+def get_mealplan_data(number):
+  weekly_plan_df = get_weekly_plan(number)
+  full_week_recipes = match_recipe(weekly_plan_df)
+  full_week_recipes['veggie'] = full_week_recipes['Tasty Recipe'].apply(veggie_or_nah)
+  mask_missing = full_week_recipes['veggie'].isna()
+  full_week_recipes.loc[mask_missing, 'veggie'] = full_week_recipes.loc[mask_missing, 'Dish'].apply(veggie_or_nah)
+  plot = graph_protein_vs_cals(full_week_recipes)
+  return full_week_recipes, plot
+result_recipes, plot = get_mealplan_data(202)
+display(result_recipes)
+```
+
+# 5 Plot and Analyze
+```{python}
+plot
+```
+
+This graph shows that both vegetarian and non-vegetarian meals offer a wide range of protein and calorie content, with some vegetarian dishes reaching high protein levels similar to non-vegetarian ones. Overall, calories tend to increase as protein rises across both groups. However, the veggie/non-veggie classification is only based on recipe names and may not always be accurate, so results should be interpreted as general trends rather than precise dietary differences.
+
