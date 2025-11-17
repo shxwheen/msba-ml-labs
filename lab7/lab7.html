@@ -2207,10 +2207,10 @@ vertical-align: -.125em;
 </header>
 
 
-<p><a href>View this project on GitHub</a></p>
+<p><a href="https://github.com/shxwheen/msba-ml-labs/blob/main/lab7/lab7.html">View this project on GitHub</a></p>
 <section id="imports" class="level1">
 <h1>Imports</h1>
-<div id="fc990a23" class="cell" data-execution_count="1">
+<div id="83eb7da7" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
@@ -2230,10 +2230,10 @@ vertical-align: -.125em;
 </section>
 <section id="read-in-csv" class="level1">
 <h1>Read In CSV</h1>
-<div id="2b1c4b73" class="cell" data-execution_count="2">
+<div id="f19bf5e1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ha <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/s/aohbr6yb9ifmc8w/heart_attack.csv?dl=1&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ha.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -2316,7 +2316,7 @@ vertical-align: -.125em;
 </section>
 <section id="data-exploration" class="level1">
 <h1>Data Exploration</h1>
-<div id="f0d0f048" class="cell" data-execution_count="3">
+<div id="517601a5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dataset shape and structure</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Dataset shape: </span><span class="sc">{</span>ha<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="ss">Data types:</span><span class="ch">\n</span><span class="sc">{</span>ha<span class="sc">.</span>dtypes<span class="sc">}</span><span class="ss">&quot;</span>)</span>
@@ -2354,10 +2354,10 @@ output
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="8007f99b" class="cell" data-execution_count="4">
+<div id="710b2958" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ha.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -2475,7 +2475,7 @@ Name: count, dtype: int64</code></pre>
 <h1>Part One: Fitting Models</h1>
 <section id="data-preprocessing-setup" class="level2">
 <h2 class="anchored" data-anchor-id="data-preprocessing-setup">Data Preprocessing Setup</h2>
-<div id="472a556c" class="cell" data-execution_count="5">
+<div id="b7134023" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate features and target</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> ha.drop(<span class="st">&#39;output&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> ha[<span class="st">&#39;output&#39;</span>]</span>
@@ -2491,7 +2491,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="q1-k-nearest-neighbors-knn" class="level2">
 <h2 class="anchored" data-anchor-id="q1-k-nearest-neighbors-knn">Q1: K-Nearest Neighbors (KNN)</h2>
-<div id="b794b550" class="cell" data-execution_count="6">
+<div id="157341b2" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create KNN pipeline</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>knn_pipeline <span class="op">=</span> Pipeline(steps<span class="op">=</span>[</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
@@ -2521,7 +2521,7 @@ Name: count, dtype: int64</code></pre>
 Cross-validated ROC AUC: 0.7879</code></pre>
 </div>
 </div>
-<div id="7dde0de5" class="cell" data-execution_count="7">
+<div id="db585855" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit final KNN model</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>knn_final <span class="op">=</span> knn_grid_search.best_estimator_</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>knn_final.fit(X, y)</span>
@@ -2555,7 +2555,7 @@ Confusion Matrix:
 </section>
 <section id="q2-logistic-regression" class="level2">
 <h2 class="anchored" data-anchor-id="q2-logistic-regression">Q2: Logistic Regression</h2>
-<div id="5ae35a35" class="cell" data-execution_count="8">
+<div id="8335d4dc" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Logistic Regression pipeline</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>logreg_pipeline <span class="op">=</span> Pipeline(steps<span class="op">=</span>[</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
@@ -2585,7 +2585,7 @@ Confusion Matrix:
 Cross-validated ROC AUC: 0.8635</code></pre>
 </div>
 </div>
-<div id="078e3602" class="cell" data-execution_count="9">
+<div id="2680db73" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit final Logistic Regression model</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>logreg_final <span class="op">=</span> logreg_grid_search.best_estimator_</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>logreg_final.fit(X, y)</span>
@@ -2615,7 +2615,7 @@ Confusion Matrix:
  [ 23 123]]</code></pre>
 </div>
 </div>
-<div id="f370268d" class="cell" data-execution_count="10">
+<div id="bf6f1f36" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpret coefficients</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>logreg_model <span class="op">=</span> logreg_final.named_steps[<span class="st">&#39;classifier&#39;</span>]</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2662,7 +2662,7 @@ Logistic Regression Coefficients:
 </section>
 <section id="q3-decision-tree" class="level2">
 <h2 class="anchored" data-anchor-id="q3-decision-tree">Q3: Decision Tree</h2>
-<div id="ef8586db" class="cell" data-execution_count="11">
+<div id="63c0cdbe" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Decision Tree pipeline</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tree_pipeline <span class="op">=</span> Pipeline(steps<span class="op">=</span>[</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
@@ -2692,7 +2692,7 @@ Logistic Regression Coefficients:
 Cross-validated ROC AUC: 0.7237</code></pre>
 </div>
 </div>
-<div id="5bfab95e" class="cell" data-execution_count="12">
+<div id="5c355e34" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit final Decision Tree model</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>tree_final <span class="op">=</span> tree_grid_search.best_estimator_</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>tree_final.fit(X, y)</span>
@@ -2722,7 +2722,7 @@ Confusion Matrix:
  [ 30 116]]</code></pre>
 </div>
 </div>
-<div id="d3b2bb78" class="cell" data-execution_count="13">
+<div id="6e5a7dc1" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature importance for Decision Tree</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>tree_model <span class="op">=</span> tree_final.named_steps[<span class="st">&#39;classifier&#39;</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2761,7 +2761,7 @@ Decision Tree Feature Importances:
 <section id="q4-interpretation---most-important-predictors" class="level2">
 <h2 class="anchored" data-anchor-id="q4-interpretation---most-important-predictors">Q4: Interpretation - Most Important Predictors</h2>
 <p><strong>Logistic Regression - Top 5 Most Important Features:</strong></p>
-<div id="b1e66e60" class="cell" data-execution_count="14">
+<div id="fb3c8ab7" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(coef_df.head(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Feature  Coefficient
@@ -2773,7 +2773,7 @@ Decision Tree Feature Importances:
 </div>
 </div>
 <p><strong>Decision Tree - Top 5 Most Important Features:</strong></p>
-<div id="210f86be" class="cell" data-execution_count="15">
+<div id="f82eedd0" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(importance_df.head(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Feature  Importance
@@ -2796,7 +2796,7 @@ Decision Tree Feature Importances:
 </section>
 <section id="q5-roc-curves" class="level2">
 <h2 class="anchored" data-anchor-id="q5-roc-curves">Q5: ROC Curves</h2>
-<div id="c2cae25c" class="cell" data-execution_count="16">
+<div id="5c9c358a" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get predicted probabilities for ROC curves</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>knn_proba <span class="op">=</span> knn_final.predict_proba(X)[:, <span class="dv">1</span>]</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>logreg_proba <span class="op">=</span> logreg_final.predict_proba(X)[:, <span class="dv">1</span>]</span>
@@ -2844,7 +2844,7 @@ Decision Tree Feature Importances:
 </ul>
 <section id="knn-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="knn-metrics">KNN Metrics</h2>
-<div id="8a0e89fe" class="cell" data-execution_count="17">
+<div id="e33104ef" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create binary labels for each class</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>is_at_risk <span class="op">=</span> (y <span class="op">==</span> <span class="dv">1</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>is_not_at_risk <span class="op">=</span> (y <span class="op">==</span> <span class="dv">0</span>)</span>
@@ -2873,7 +2873,7 @@ Decision Tree Feature Importances:
 </section>
 <section id="logistic-regression-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="logistic-regression-metrics">Logistic Regression Metrics</h2>
-<div id="d07d2cd6" class="cell" data-execution_count="18">
+<div id="08c36a9d" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate cross-validated metrics for Logistic Regression</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>logreg_recall <span class="op">=</span> cross_val_score(logreg_pipeline, X, is_at_risk,</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                                cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;recall&quot;</span>).mean()</span>
@@ -2898,7 +2898,7 @@ Decision Tree Feature Importances:
 </section>
 <section id="decision-tree-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree-metrics">Decision Tree Metrics</h2>
-<div id="cac5cf47" class="cell" data-execution_count="19">
+<div id="f00a4d5e" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate cross-validated metrics for Decision Tree</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>tree_recall <span class="op">=</span> cross_val_score(tree_pipeline, X, is_at_risk,</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                              cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;recall&quot;</span>).mean()</span>
@@ -2923,7 +2923,7 @@ Decision Tree Feature Importances:
 </section>
 <section id="summary-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="summary-comparison">Summary Comparison</h2>
-<div id="9585aae0" class="cell" data-execution_count="20">
+<div id="0aa40ebd" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create summary dataframe comparing all models</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>metrics_summary <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Model&#39;</span>: [<span class="st">&#39;KNN&#39;</span>, <span class="st">&#39;Logistic Regression&#39;</span>, <span class="st">&#39;Decision Tree&#39;</span>],</span>
@@ -2982,11 +2982,11 @@ Logistic Regression 0.808736   0.792213     0.738462
 </section>
 <section id="part-four-validation" class="level1">
 <h1>Part Four: Validation</h1>
-<div id="a2b645cf" class="cell" data-execution_count="21">
+<div id="c54b6d7b" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ha_validation <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/s/jkwqdiyx6o6oad0/heart_attack_validation.csv?dl=1&quot;</span>)</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>ha_validation.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="52">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <div>
 
 
@@ -3066,7 +3066,7 @@ Logistic Regression 0.808736   0.792213     0.738462
 </div>
 </div>
 </div>
-<div id="128e796a" class="cell" data-execution_count="22">
+<div id="13e07b99" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate features and target for validation set</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>X_valid <span class="op">=</span> ha_validation.drop(<span class="st">&#39;output&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>y_valid <span class="op">=</span> ha_validation[<span class="st">&#39;output&#39;</span>]</span>
@@ -3084,7 +3084,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 <section id="knn---validation-performance" class="level2">
 <h2 class="anchored" data-anchor-id="knn---validation-performance">KNN - Validation Performance</h2>
-<div id="45bad14b" class="cell" data-execution_count="23">
+<div id="183abf91" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> precision_score, recall_score</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on validation set</span></span>
@@ -3126,7 +3126,7 @@ KNN Validation Metrics:
 </section>
 <section id="logistic-regression---validation-performance" class="level2">
 <h2 class="anchored" data-anchor-id="logistic-regression---validation-performance">Logistic Regression - Validation Performance</h2>
-<div id="7aebb4e8" class="cell" data-execution_count="24">
+<div id="54b03b52" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on validation set</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>logreg_valid_predictions <span class="op">=</span> logreg_final.predict(X_valid)</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>logreg_valid_proba <span class="op">=</span> logreg_final.predict_proba(X_valid)[:, <span class="dv">1</span>]</span>
@@ -3166,7 +3166,7 @@ Logistic Regression Validation Metrics:
 </section>
 <section id="decision-tree---validation-performance" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree---validation-performance">Decision Tree - Validation Performance</h2>
-<div id="154e5582" class="cell" data-execution_count="25">
+<div id="b1d92440" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions on validation set</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>tree_valid_predictions <span class="op">=</span> tree_final.predict(X_valid)</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>tree_valid_proba <span class="op">=</span> tree_final.predict_proba(X_valid)[:, <span class="dv">1</span>]</span>
@@ -3206,7 +3206,7 @@ Decision Tree Validation Metrics:
 </section>
 <section id="comparison-cross-validated-vs-validation-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="comparison-cross-validated-vs-validation-metrics">Comparison: Cross-Validated vs Validation Metrics</h2>
-<div id="a739abed" class="cell" data-execution_count="26">
+<div id="b31a679b" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create comparison dataframe</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Model&#39;</span>: [<span class="st">&#39;KNN&#39;</span>, <span class="st">&#39;KNN&#39;</span>, <span class="st">&#39;Logistic Regression&#39;</span>, <span class="st">&#39;Logistic Regression&#39;</span>,</span>
@@ -3239,7 +3239,7 @@ Logistic Regression    Validation 0.789474   0.833333 0.875598
 </div>
 <p><strong>Analysis: Did cross-validated estimates predict validation performance?</strong></p>
 <p>Looking at the comparison above, we can see if the cross-validated metrics from Parts One and Two accurately predicted performance on the held-out validation set.</p>
-<div id="14373ed9" class="cell" data-execution_count="27">
+<div id="e1b4de79" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate differences between CV and Validation</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Difference (Validation - CV):&quot;</span>)</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="ss">KNN:&quot;</span>)</span>
@@ -3315,7 +3315,7 @@ Decision Tree:
 </section>
 <section id="calculating-cohens-kappa-for-models" class="level2">
 <h2 class="anchored" data-anchor-id="calculating-cohens-kappa-for-models">Calculating Cohen’s Kappa for Models</h2>
-<div id="da7edca3" class="cell" data-execution_count="28">
+<div id="abe4506b" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> cohen_kappa_score, make_scorer</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a scorer for Cohen&#39;s Kappa</span></span>
@@ -3342,7 +3342,7 @@ Decision Tree:
   Decision Tree:       0.3237</code></pre>
 </div>
 </div>
-<div id="17813f41" class="cell" data-execution_count="29">
+<div id="1aa70ed0" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Validation set for comparison</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>knn_kappa_valid <span class="op">=</span> cohen_kappa_score(y_valid, knn_valid_predictions)</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>logreg_kappa_valid <span class="op">=</span> cohen_kappa_score(y_valid, logreg_valid_predictions)</span>
@@ -3360,7 +3360,7 @@ Validation Set Cohen&#39;s Kappa Scores:
   Decision Tree:       0.3333</code></pre>
 </div>
 </div>
-<div id="4101c268" class="cell" data-execution_count="30">
+<div id="b35daf4f" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create comparison with other metrics</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>kappa_comparison <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Model&#39;</span>: [<span class="st">&#39;KNN&#39;</span>, <span class="st">&#39;Logistic Regression&#39;</span>, <span class="st">&#39;Decision Tree&#39;</span>],</span>
@@ -3384,7 +3384,7 @@ Logistic Regression            0.548799     0.808736        0.792213      0.8807
 </section>
 <section id="does-conclusion-change" class="level2">
 <h2 class="anchored" data-anchor-id="does-conclusion-change">Does Conclusion Change?</h2>
-<div id="8d58b243" class="cell" data-execution_count="31">
+<div id="675b5b74" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank models by different metrics</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Model Rankings by Different Metrics:&quot;</span>)</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">By Cohen&#39;s Kappa (CV):&quot;</span>)</span>
