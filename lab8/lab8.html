@@ -2207,7 +2207,8 @@ vertical-align: -.125em;
 </header>
 
 
-<div id="21bd2da8" class="cell" data-execution_count="1">
+<p><a href="https://github.com/shxwheen/msba-ml-labs/tree/main/lab8">View this project on GitHub</a></p>
+<div id="94092ea4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2226,11 +2227,11 @@ vertical-align: -.125em;
 </div>
 <section id="the-data" class="level1">
 <h1>The Data</h1>
-<div id="9ea4d5ff" class="cell" data-execution_count="2">
+<div id="3b2cebc7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;cannabis_full.csv&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="80">
 <div>
 
 
@@ -2389,10 +2390,10 @@ vertical-align: -.125em;
 </div>
 </div>
 </div>
-<div id="00d5b3ff" class="cell" data-execution_count="3">
+<div id="4eaecfd7" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check class distribution</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;Type&#39;</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="81">
 <pre><code>Type
 hybrid    1123
 indica     659
@@ -2404,17 +2405,17 @@ Name: count, dtype: int64</code></pre>
 <section id="part-one-binary-classification" class="level1">
 <h1>Part One: Binary Classification</h1>
 <p>Create dataset with only Sativa and Indica strains.</p>
-<div id="5816fff9" class="cell" data-execution_count="4">
+<div id="b29f91d2" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_binary <span class="op">=</span> df[df[<span class="st">&#39;Type&#39;</span>].isin([<span class="st">&#39;sativa&#39;</span>, <span class="st">&#39;indica&#39;</span>])].copy()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_binary[<span class="st">&#39;Type&#39;</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="82">
 <pre><code>Type
 indica    659
 sativa    409
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="1177163e" class="cell" data-execution_count="5">
+<div id="fa8cc744" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up X and y for binary classification</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X_binary <span class="op">=</span> df_binary.drop(columns<span class="op">=</span>[<span class="st">&#39;Strain&#39;</span>, <span class="st">&#39;Type&#39;</span>, <span class="st">&#39;Rating&#39;</span>, <span class="st">&#39;Effects&#39;</span>, <span class="st">&#39;Flavor&#39;</span>])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>y_binary <span class="op">=</span> df_binary[<span class="st">&#39;Type&#39;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2422,7 +2423,7 @@ Name: count, dtype: int64</code></pre>
 <p><strong>Metric Choice:</strong> I will use <strong>accuracy</strong> because we care equally about identifying both classes and there’s no specific target to prioritize.</p>
 <section id="q1-lda" class="level2">
 <h2 class="anchored" data-anchor-id="q1-lda">Q1: LDA</h2>
-<div id="51fd87bf" class="cell" data-execution_count="6">
+<div id="785ce6fb" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lda_model <span class="op">=</span> Pipeline([</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, LinearDiscriminantAnalysis())</span>
@@ -2434,7 +2435,7 @@ Name: count, dtype: int64</code></pre>
 <pre><code>LDA CV Accuracy: 0.8567</code></pre>
 </div>
 </div>
-<div id="d0370e0a" class="cell" data-execution_count="7">
+<div id="3a753539" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit final model and confusion matrix</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lda_model.fit(X_binary, y_binary)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lda_pred <span class="op">=</span> lda_model.predict(X_binary)</span>
@@ -2452,7 +2453,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="q2-qda" class="level2">
 <h2 class="anchored" data-anchor-id="q2-qda">Q2: QDA</h2>
-<div id="b4a656e9" class="cell" data-execution_count="8">
+<div id="81e01db4" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>qda_model <span class="op">=</span> Pipeline([</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, QuadraticDiscriminantAnalysis())</span>
@@ -2464,7 +2465,7 @@ Name: count, dtype: int64</code></pre>
 <pre><code>QDA CV Accuracy: 0.5000</code></pre>
 </div>
 </div>
-<div id="23bfe1a6" class="cell" data-execution_count="9">
+<div id="836496fa" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>qda_model.fit(X_binary, y_binary)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>qda_pred <span class="op">=</span> qda_model.predict(X_binary)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_binary, qda_pred)</span>
@@ -2481,7 +2482,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="q3-svc" class="level2">
 <h2 class="anchored" data-anchor-id="q3-svc">Q3: SVC</h2>
-<div id="e77c856b" class="cell" data-execution_count="10">
+<div id="1ea03e9c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>svc_pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, SVC(kernel<span class="op">=</span><span class="st">&quot;linear&quot;</span>))</span>
@@ -2499,7 +2500,7 @@ Name: count, dtype: int64</code></pre>
 SVC CV Accuracy: 0.8586</code></pre>
 </div>
 </div>
-<div id="a91aca93" class="cell" data-execution_count="11">
+<div id="15383602" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>svc_best <span class="op">=</span> svc_grid.best_estimator_</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>svc_pred <span class="op">=</span> svc_best.predict(X_binary)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_binary, svc_pred)</span>
@@ -2516,7 +2517,7 @@ SVC CV Accuracy: 0.8586</code></pre>
 </section>
 <section id="q4-svm-polynomial-kernel" class="level2">
 <h2 class="anchored" data-anchor-id="q4-svm-polynomial-kernel">Q4: SVM (Polynomial Kernel)</h2>
-<div id="95759076" class="cell" data-execution_count="12">
+<div id="d0205138" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>svm_pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, SVC(kernel<span class="op">=</span><span class="st">&quot;poly&quot;</span>))</span>
@@ -2537,7 +2538,7 @@ SVC CV Accuracy: 0.8586</code></pre>
 SVM CV Accuracy: 0.8409</code></pre>
 </div>
 </div>
-<div id="069ef458" class="cell" data-execution_count="13">
+<div id="1cfaca53" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>svm_best <span class="op">=</span> svm_grid.best_estimator_</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>svm_pred <span class="op">=</span> svm_best.predict(X_binary)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_binary, svm_pred)</span>
@@ -2556,13 +2557,13 @@ SVM CV Accuracy: 0.8409</code></pre>
 <section id="part-two-natural-multiclass" class="level1">
 <h1>Part Two: Natural Multiclass</h1>
 <p>Now use the full dataset including Hybrid strains.</p>
-<div id="3aed728d" class="cell" data-execution_count="14">
+<div id="5f9ba7f7" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>X_full <span class="op">=</span> df.drop(columns<span class="op">=</span>[<span class="st">&#39;Strain&#39;</span>, <span class="st">&#39;Type&#39;</span>, <span class="st">&#39;Rating&#39;</span>, <span class="st">&#39;Effects&#39;</span>, <span class="st">&#39;Flavor&#39;</span>])</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_full <span class="op">=</span> df[<span class="st">&#39;Type&#39;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="q1-decision-tree" class="level2">
 <h2 class="anchored" data-anchor-id="q1-decision-tree">Q1: Decision Tree</h2>
-<div id="c63e1135" class="cell" data-execution_count="15">
+<div id="2194ffe1" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dt_model <span class="op">=</span> Pipeline([</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">42</span>))</span>
@@ -2574,7 +2575,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 <pre><code>Decision Tree CV Accuracy: 0.6198</code></pre>
 </div>
 </div>
-<div id="3dd90742" class="cell" data-execution_count="16">
+<div id="f6531c49" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dt_model.fit(X_full, y_full)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">10</span>))</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>plot_tree(dt_model.named_steps[<span class="st">&quot;model&quot;</span>],</span>
@@ -2597,7 +2598,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 <h2 class="anchored" data-anchor-id="q2-lda-qda-knn">Q2: LDA, QDA, KNN</h2>
 <section id="lda-multiclass" class="level3">
 <h3 class="anchored" data-anchor-id="lda-multiclass">LDA (Multiclass)</h3>
-<div id="aa7c4d0b" class="cell" data-execution_count="17">
+<div id="bce913a8" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lda_multi <span class="op">=</span> Pipeline([</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, LinearDiscriminantAnalysis())</span>
@@ -2609,7 +2610,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 <pre><code>LDA CV Accuracy: 0.6280</code></pre>
 </div>
 </div>
-<div id="cbe14333" class="cell" data-execution_count="18">
+<div id="3f66a726" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lda_multi.fit(X_full, y_full)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>lda_multi_pred <span class="op">=</span> lda_multi.predict(X_full)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_full, lda_multi_pred)</span>
@@ -2626,7 +2627,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 </section>
 <section id="qda-multiclass" class="level3">
 <h3 class="anchored" data-anchor-id="qda-multiclass">QDA (Multiclass)</h3>
-<div id="9a4d8123" class="cell" data-execution_count="19">
+<div id="e3de2463" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>qda_multi <span class="op">=</span> Pipeline([</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, QuadraticDiscriminantAnalysis())</span>
@@ -2638,7 +2639,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 <pre><code>QDA CV Accuracy: 0.2305</code></pre>
 </div>
 </div>
-<div id="5191a479" class="cell" data-execution_count="20">
+<div id="7b0ce362" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>qda_multi.fit(X_full, y_full)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>qda_multi_pred <span class="op">=</span> qda_multi.predict(X_full)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_full, qda_multi_pred)</span>
@@ -2655,7 +2656,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 </section>
 <section id="knn-multiclass" class="level3">
 <h3 class="anchored" data-anchor-id="knn-multiclass">KNN (Multiclass)</h3>
-<div id="598028a2" class="cell" data-execution_count="21">
+<div id="e1ea9c24" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>knn_pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scale&quot;</span>, StandardScaler()),</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;model&quot;</span>, KNeighborsClassifier())</span>
@@ -2673,7 +2674,7 @@ SVM CV Accuracy: 0.8409</code></pre>
 KNN CV Accuracy: 0.5509</code></pre>
 </div>
 </div>
-<div id="0d4c5577" class="cell" data-execution_count="22">
+<div id="76a4779e" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>knn_best <span class="op">=</span> knn_grid.best_estimator_</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>knn_pred <span class="op">=</span> knn_best.predict(X_full)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_full, knn_pred)</span>
@@ -2701,7 +2702,7 @@ KNN CV Accuracy: 0.5509</code></pre>
 <h2 class="anchored" data-anchor-id="q1-ovr-models">Q1: OvR Models</h2>
 <section id="svc-ovr" class="level3">
 <h3 class="anchored" data-anchor-id="svc-ovr">SVC OvR</h3>
-<div id="21a01b17" class="cell" data-execution_count="23">
+<div id="6c2e8531" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Indica vs Not Indica</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>y_indica <span class="op">=</span> (y_full <span class="op">==</span> <span class="st">&#39;indica&#39;</span>).astype(<span class="bu">int</span>)</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>svc_indica <span class="op">=</span> Pipeline([(<span class="st">&quot;scale&quot;</span>, StandardScaler()), (<span class="st">&quot;model&quot;</span>, SVC(kernel<span class="op">=</span><span class="st">&quot;linear&quot;</span>))])</span>
@@ -2728,7 +2729,7 @@ SVC Hybrid vs Rest F1: 0.6711</code></pre>
 </section>
 <section id="logistic-regression-ovr" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regression-ovr">Logistic Regression OvR</h3>
-<div id="3b76248a" class="cell" data-execution_count="24">
+<div id="70ec7e8c" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Indica vs Not Indica</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>lr_indica <span class="op">=</span> Pipeline([(<span class="st">&quot;scale&quot;</span>, StandardScaler()), (<span class="st">&quot;model&quot;</span>, LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))])</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>lr_indica_cv <span class="op">=</span> cross_val_score(lr_indica, X_full, y_indica, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;f1&quot;</span>)</span>
@@ -2759,7 +2760,7 @@ LR Hybrid vs Rest F1: 0.6368</code></pre>
 <h2 class="anchored" data-anchor-id="q3-ovo-models">Q3: OvO Models</h2>
 <section id="svc-ovo" class="level3">
 <h3 class="anchored" data-anchor-id="svc-ovo">SVC OvO</h3>
-<div id="64685fcb" class="cell" data-execution_count="25">
+<div id="2f2865b2" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Indica vs Sativa</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>df_ind_sat <span class="op">=</span> df[df[<span class="st">&#39;Type&#39;</span>].isin([<span class="st">&#39;indica&#39;</span>, <span class="st">&#39;sativa&#39;</span>])]</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>X_ind_sat <span class="op">=</span> df_ind_sat.drop(columns<span class="op">=</span>[<span class="st">&#39;Strain&#39;</span>, <span class="st">&#39;Type&#39;</span>, <span class="st">&#39;Rating&#39;</span>, <span class="st">&#39;Effects&#39;</span>, <span class="st">&#39;Flavor&#39;</span>])</span>
@@ -2795,7 +2796,7 @@ SVC Hybrid vs Sativa ROC-AUC: 0.7325</code></pre>
 </section>
 <section id="logistic-regression-ovo" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regression-ovo">Logistic Regression OvO</h3>
-<div id="8faaa229" class="cell" data-execution_count="26">
+<div id="5b837bb0" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Indica vs Sativa</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>lr_ind_sat <span class="op">=</span> Pipeline([(<span class="st">&quot;scale&quot;</span>, StandardScaler()), (<span class="st">&quot;model&quot;</span>, LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))])</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lr_ind_sat_cv <span class="op">=</span> cross_val_score(lr_ind_sat, X_ind_sat, y_ind_sat, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;roc_auc&quot;</span>)</span>
