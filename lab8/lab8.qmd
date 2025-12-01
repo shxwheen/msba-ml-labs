@@ -1,0 +1,368 @@
+---
+title: "Lab 8: Linear Classifiers"
+author: "Shawheen Ghezavat"
+format:
+  html:
+    embed-resources: true
+jupyter: python3
+---
+
+```{python}
+import warnings
+warnings.filterwarnings('ignore')
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+```
+
+# The Data
+
+```{python}
+df = pd.read_csv("cannabis_full.csv")
+df = df.dropna()
+df.head()
+```
+
+```{python}
+# Check class distribution
+df['Type'].value_counts()
+```
+
+# Part One: Binary Classification
+
+Create dataset with only Sativa and Indica strains.
+
+```{python}
+df_binary = df[df['Type'].isin(['sativa', 'indica'])].copy()
+df_binary['Type'].value_counts()
+```
+
+```{python}
+# Set up X and y for binary classification
+X_binary = df_binary.drop(columns=['Strain', 'Type', 'Rating', 'Effects', 'Flavor'])
+y_binary = df_binary['Type']
+```
+
+**Metric Choice:** I will use **accuracy** because we care equally about identifying both classes and there's no specific target to prioritize.
+
+## Q1: LDA
+
+```{python}
+lda_model = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", LinearDiscriminantAnalysis())
+])
+
+lda_cv = cross_val_score(lda_model, X_binary, y_binary, cv=5, scoring="accuracy")
+print(f"LDA CV Accuracy: {lda_cv.mean():.4f}")
+```
+
+```{python}
+# Fit final model and confusion matrix
+lda_model.fit(X_binary, y_binary)
+lda_pred = lda_model.predict(X_binary)
+ConfusionMatrixDisplay.from_predictions(y_binary, lda_pred)
+plt.title("LDA Confusion Matrix")
+plt.show()
+```
+
+## Q2: QDA
+
+```{python}
+qda_model = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", QuadraticDiscriminantAnalysis())
+])
+
+qda_cv = cross_val_score(qda_model, X_binary, y_binary, cv=5, scoring="accuracy")
+print(f"QDA CV Accuracy: {qda_cv.mean():.4f}")
+```
+
+```{python}
+qda_model.fit(X_binary, y_binary)
+qda_pred = qda_model.predict(X_binary)
+ConfusionMatrixDisplay.from_predictions(y_binary, qda_pred)
+plt.title("QDA Confusion Matrix")
+plt.show()
+```
+
+## Q3: SVC
+
+```{python}
+svc_pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", SVC(kernel="linear"))
+])
+
+param_grid = {'model__C': [0.01, 0.1, 1, 10, 100]}
+
+svc_grid = GridSearchCV(svc_pipeline, param_grid, cv=5, scoring="accuracy")
+svc_grid.fit(X_binary, y_binary)
+
+print(f"Best C: {svc_grid.best_params_}")
+print(f"SVC CV Accuracy: {svc_grid.best_score_:.4f}")
+```
+
+```{python}
+svc_best = svc_grid.best_estimator_
+svc_pred = svc_best.predict(X_binary)
+ConfusionMatrixDisplay.from_predictions(y_binary, svc_pred)
+plt.title("SVC Confusion Matrix")
+plt.show()
+```
+
+## Q4: SVM (Polynomial Kernel)
+
+```{python}
+svm_pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", SVC(kernel="poly"))
+])
+
+param_grid = {
+    'model__C': [0.1, 1, 10],
+    'model__degree': [2, 3]
+}
+
+svm_grid = GridSearchCV(svm_pipeline, param_grid, cv=5, scoring="accuracy")
+svm_grid.fit(X_binary, y_binary)
+
+print(f"Best params: {svm_grid.best_params_}")
+print(f"SVM CV Accuracy: {svm_grid.best_score_:.4f}")
+```
+
+```{python}
+svm_best = svm_grid.best_estimator_
+svm_pred = svm_best.predict(X_binary)
+ConfusionMatrixDisplay.from_predictions(y_binary, svm_pred)
+plt.title("SVM (Polynomial) Confusion Matrix")
+plt.show()
+```
+
+# Part Two: Natural Multiclass
+
+Now use the full dataset including Hybrid strains.
+
+```{python}
+X_full = df.drop(columns=['Strain', 'Type', 'Rating', 'Effects', 'Flavor'])
+y_full = df['Type']
+```
+
+## Q1: Decision Tree
+
+```{python}
+dt_model = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", DecisionTreeClassifier(max_depth=3, random_state=42))
+])
+
+dt_cv = cross_val_score(dt_model, X_full, y_full, cv=5, scoring="accuracy")
+print(f"Decision Tree CV Accuracy: {dt_cv.mean():.4f}")
+```
+
+```{python}
+dt_model.fit(X_full, y_full)
+plt.figure(figsize=(20, 10))
+plot_tree(dt_model.named_steps["model"],
+          feature_names=X_full.columns,
+          class_names=['hybrid', 'indica', 'sativa'],
+          filled=True)
+plt.title("Decision Tree")
+plt.show()
+```
+
+**Interpretation:** The tree first splits on Sleepy, making it the most important feature. Strains without the Sleepy effect (left branch) are further split by Energetic and Relaxed, leading mostly to Hybrid or Sativa classifications. Strains with the Sleepy effect (right branch) are split by Citrus and Uplifted, leading mostly to Indica. This aligns with the known characteristics of cannabis types: Indica strains tend to be relaxing/sleepy, while Sativa strains tend to be energetic.
+
+## Q2: LDA, QDA, KNN
+
+### LDA (Multiclass)
+
+```{python}
+lda_multi = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", LinearDiscriminantAnalysis())
+])
+
+lda_multi_cv = cross_val_score(lda_multi, X_full, y_full, cv=5, scoring="accuracy")
+print(f"LDA CV Accuracy: {lda_multi_cv.mean():.4f}")
+```
+
+```{python}
+lda_multi.fit(X_full, y_full)
+lda_multi_pred = lda_multi.predict(X_full)
+ConfusionMatrixDisplay.from_predictions(y_full, lda_multi_pred)
+plt.title("LDA Multiclass Confusion Matrix")
+plt.show()
+```
+
+### QDA (Multiclass)
+
+```{python}
+qda_multi = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", QuadraticDiscriminantAnalysis())
+])
+
+qda_multi_cv = cross_val_score(qda_multi, X_full, y_full, cv=5, scoring="accuracy")
+print(f"QDA CV Accuracy: {qda_multi_cv.mean():.4f}")
+```
+
+```{python}
+qda_multi.fit(X_full, y_full)
+qda_multi_pred = qda_multi.predict(X_full)
+ConfusionMatrixDisplay.from_predictions(y_full, qda_multi_pred)
+plt.title("QDA Multiclass Confusion Matrix")
+plt.show()
+```
+
+### KNN (Multiclass)
+
+```{python}
+knn_pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", KNeighborsClassifier())
+])
+
+param_grid = {'model__n_neighbors': [3, 5, 7, 9, 11]}
+
+knn_grid = GridSearchCV(knn_pipeline, param_grid, cv=5, scoring="accuracy")
+knn_grid.fit(X_full, y_full)
+
+print(f"Best K: {knn_grid.best_params_}")
+print(f"KNN CV Accuracy: {knn_grid.best_score_:.4f}")
+```
+
+```{python}
+knn_best = knn_grid.best_estimator_
+knn_pred = knn_best.predict(X_full)
+ConfusionMatrixDisplay.from_predictions(y_full, knn_pred)
+plt.title("KNN Multiclass Confusion Matrix")
+plt.show()
+```
+
+## Q3: Comparison
+
+Metrics were worse across all models. LDA dropped from 85.67% to 62.80%, QDA from 49.90% to 26.47%, and Decision Tree and KNN achieved only 61.98% and 55.09% respectively. This is expected since distinguishing 3 classes is harder than 2.
+
+The confusion matrices show that Hybrid was most often confused with other categories, while Indica and Sativa were rarely misclassified as each other. This makes sense because Hybrid strains are a mix of both types and share features with each, while Indica and Sativa have more distinct profiles.
+
+# Part Three: Multiclass from Binary
+
+## Q1: OvR Models
+
+### SVC OvR
+
+```{python}
+# Indica vs Not Indica
+y_indica = (y_full == 'indica').astype(int)
+svc_indica = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_indica_cv = cross_val_score(svc_indica, X_full, y_indica, cv=5, scoring="f1")
+print(f"SVC Indica vs Rest F1: {svc_indica_cv.mean():.4f}")
+
+# Sativa vs Not Sativa
+y_sativa = (y_full == 'sativa').astype(int)
+svc_sativa = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_sativa_cv = cross_val_score(svc_sativa, X_full, y_sativa, cv=5, scoring="f1")
+print(f"SVC Sativa vs Rest F1: {svc_sativa_cv.mean():.4f}")
+
+# Hybrid vs Not Hybrid
+y_hybrid = (y_full == 'hybrid').astype(int)
+svc_hybrid = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_hybrid_cv = cross_val_score(svc_hybrid, X_full, y_hybrid, cv=5, scoring="f1")
+print(f"SVC Hybrid vs Rest F1: {svc_hybrid_cv.mean():.4f}")
+```
+
+### Logistic Regression OvR
+
+```{python}
+# Indica vs Not Indica
+lr_indica = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_indica_cv = cross_val_score(lr_indica, X_full, y_indica, cv=5, scoring="f1")
+print(f"LR Indica vs Rest F1: {lr_indica_cv.mean():.4f}")
+
+# Sativa vs Not Sativa
+lr_sativa = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_sativa_cv = cross_val_score(lr_sativa, X_full, y_sativa, cv=5, scoring="f1")
+print(f"LR Sativa vs Rest F1: {lr_sativa_cv.mean():.4f}")
+
+# Hybrid vs Not Hybrid
+lr_hybrid = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_hybrid_cv = cross_val_score(lr_hybrid, X_full, y_hybrid, cv=5, scoring="f1")
+print(f"LR Hybrid vs Rest F1: {lr_hybrid_cv.mean():.4f}")
+```
+
+## Q2: OvR Analysis
+
+SVC Hybrid vs Rest performed best (F1 = 0.6711), while SVC Sativa vs Rest performed worst (F1 = 0.2936). This makes intuitive sense: Hybrid is the largest class (~52% of data) giving the model more examples to learn from, while Sativa is the smallest class (~19%) making it harder to distinguish from the rest.
+
+## Q3: OvO Models
+
+### SVC OvO
+
+```{python}
+# Indica vs Sativa
+df_ind_sat = df[df['Type'].isin(['indica', 'sativa'])]
+X_ind_sat = df_ind_sat.drop(columns=['Strain', 'Type', 'Rating', 'Effects', 'Flavor'])
+y_ind_sat = df_ind_sat['Type']
+
+svc_ind_sat = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_ind_sat_cv = cross_val_score(svc_ind_sat, X_ind_sat, y_ind_sat, cv=5, scoring="roc_auc")
+print(f"SVC Indica vs Sativa ROC-AUC: {svc_ind_sat_cv.mean():.4f}")
+
+# Indica vs Hybrid
+df_ind_hyb = df[df['Type'].isin(['indica', 'hybrid'])]
+X_ind_hyb = df_ind_hyb.drop(columns=['Strain', 'Type', 'Rating', 'Effects', 'Flavor'])
+y_ind_hyb = df_ind_hyb['Type']
+
+svc_ind_hyb = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_ind_hyb_cv = cross_val_score(svc_ind_hyb, X_ind_hyb, y_ind_hyb, cv=5, scoring="roc_auc")
+print(f"SVC Indica vs Hybrid ROC-AUC: {svc_ind_hyb_cv.mean():.4f}")
+
+# Hybrid vs Sativa
+df_hyb_sat = df[df['Type'].isin(['hybrid', 'sativa'])]
+X_hyb_sat = df_hyb_sat.drop(columns=['Strain', 'Type', 'Rating', 'Effects', 'Flavor'])
+y_hyb_sat = df_hyb_sat['Type']
+
+svc_hyb_sat = Pipeline([("scale", StandardScaler()), ("model", SVC(kernel="linear"))])
+svc_hyb_sat_cv = cross_val_score(svc_hyb_sat, X_hyb_sat, y_hyb_sat, cv=5, scoring="roc_auc")
+print(f"SVC Hybrid vs Sativa ROC-AUC: {svc_hyb_sat_cv.mean():.4f}")
+```
+
+### Logistic Regression OvO
+
+```{python}
+# Indica vs Sativa
+lr_ind_sat = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_ind_sat_cv = cross_val_score(lr_ind_sat, X_ind_sat, y_ind_sat, cv=5, scoring="roc_auc")
+print(f"LR Indica vs Sativa ROC-AUC: {lr_ind_sat_cv.mean():.4f}")
+
+# Indica vs Hybrid
+lr_ind_hyb = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_ind_hyb_cv = cross_val_score(lr_ind_hyb, X_ind_hyb, y_ind_hyb, cv=5, scoring="roc_auc")
+print(f"LR Indica vs Hybrid ROC-AUC: {lr_ind_hyb_cv.mean():.4f}")
+
+# Hybrid vs Sativa
+lr_hyb_sat = Pipeline([("scale", StandardScaler()), ("model", LogisticRegression(max_iter=1000))])
+lr_hyb_sat_cv = cross_val_score(lr_hyb_sat, X_hyb_sat, y_hyb_sat, cv=5, scoring="roc_auc")
+print(f"LR Hybrid vs Sativa ROC-AUC: {lr_hyb_sat_cv.mean():.4f}")
+```
+
+## Q4: OvO Analysis
+
+Both SVC and LR performed best on Indica vs Sativa (ROC-AUC ~0.93) and worst on Hybrid vs Sativa (ROC-AUC ~0.73). This makes intuitive sense: Indica and Sativa are the two "pure" types with distinct characteristics (e.g., Sleepy vs Energetic), making them easiest to separate. Any comparison involving Hybrid is harder because Hybrid shares features with both parent types.
+
+## Q5: Default Multiclass Behavior
+
+`LogisticRegression` uses **OvR** by default (builds "X vs Not X" models for each class).
+
+`SVC` uses **OvO** by default (builds pairwise comparison models between each pair of classes).
